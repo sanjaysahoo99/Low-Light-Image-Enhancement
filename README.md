@@ -19,13 +19,51 @@ Images captured in low-light environments often suffer from:
 
 This project implements an image enhancement pipeline using classical image processing techniques to improve the visual quality of low-light images.
 
+
 ---
 
+
+
+## 🖼️ Results
+
+The following images show the output at each stage of the proposed enhancement pipeline.
+
+### Input Image
+
+![Input Image](screenshots/input.jpeg)
+
+### Gamma Correction
+
+![Gamma Correction](screenshots/gamma.jpg)
+
+### CLAHE Enhancement
+
+![CLAHE Enhancement](screenshots/clahe.jpg)
+
+### Bilateral Filtering
+
+![Bilateral Filtering](screenshots/bilateral.jpg)
+
+### Final Enhanced Image
+
+![Final Enhanced Image](screenshots/final.jpg)
 ## 🔄 Enhancement Pipeline
+
+
+## 📊 Enhancement Results
+
+| Stage | Result |
+|------|--------|
+| Input | <img src="screenshots/input.jpeg" width="500"> |
+| Gamma Correction | <img src="screenshots/gamma.jpg" width="500"> |
+| CLAHE | <img src="screenshots/clahe.jpg" width="500"> |
+| Bilateral Filter | <img src="screenshots/bilateral.jpg" width="500"> |
+| Final Output | <img src="screenshots/final.jpg" width="500"> |
 
 The proposed pipeline is:
 
-```text
+``` text
+
 Input Image
      ↓
 Preprocessing
