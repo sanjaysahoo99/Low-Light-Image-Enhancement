@@ -30,23 +30,23 @@ The following images show the output at each stage of the proposed enhancement p
 
 ### Input Image
 
-![Input Image](screenshots/input.jpeg)
+![Input Image](screenshotsinput.jpeg)
 
 ### Gamma Correction
 
-![Gamma Correction](screenshots/gamma.jpg)
+![Gamma Correction](screenshotsgamma.jpg)
 
 ### CLAHE Enhancement
 
-![CLAHE Enhancement](screenshots/clahe.jpg)
+![CLAHE Enhancement](screenshotsclahe.jpg)
 
 ### Bilateral Filtering
 
-![Bilateral Filtering](screenshots/bilateral.jpg)
+![Bilateral Filtering](screenshotsbilateral.jpg)
 
 ### Final Enhanced Image
 
-![Final Enhanced Image](screenshots/final.jpg)
+![Final Enhanced Image](screenshotsfinal.jpg)
 ## 🔄 Enhancement Pipeline
 
 
@@ -54,11 +54,11 @@ The following images show the output at each stage of the proposed enhancement p
 
 | Stage | Result |
 |------|--------|
-| Input | <img src="screenshots/input.jpeg" width="500"> |
-| Gamma Correction | <img src="screenshots/gamma.jpg" width="500"> |
-| CLAHE | <img src="screenshots/clahe.jpg" width="500"> |
-| Bilateral Filter | <img src="screenshots/bilateral.jpg" width="500"> |
-| Final Output | <img src="screenshots/final.jpg" width="500"> |
+| Input | <img src="screenshotsinput.jpeg" width="500"> |
+| Gamma Correction | <img src="screenshotsgamma.jpg" width="500"> |
+| CLAHE | <img src="screenshotsclahe.jpg" width="500"> |
+| Bilateral Filter | <img src="screenshotsbilateral.jpg" width="500"> |
+| Final Output | <img src="screenshotsfinal.jpg" width="500"> |
 
 The proposed pipeline is:
 
