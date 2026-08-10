@@ -1,4 +1,4 @@
-INPUT_IMAGE = "input/input.png"
+INPUT_IMAGE = "input/images.jpeg"
 
 GAMMA = 1.8
 
