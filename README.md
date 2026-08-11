@@ -30,7 +30,7 @@ The following images show the output at each stage of the proposed enhancement p
 
 ### Input Image
 
-![Input Image](screenshotsinput.jpeg)
+![Input Image](screenshotsinput.png)
 
 ### Gamma Correction
 
