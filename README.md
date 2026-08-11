@@ -54,11 +54,11 @@ The following images show the output at each stage of the proposed enhancement p
 
 | Stage | Result |
 |------|--------|
-| Input | <img src="screenshotsinput.jpeg" width="500"> |
-| Gamma Correction | <img src="screenshotsgamma.jpg" width="500"> |
-| CLAHE | <img src="screenshotsclahe.jpg" width="500"> |
-| Bilateral Filter | <img src="screenshotsbilateral.jpg" width="500"> |
-| Final Output | <img src="screenshotsfinal.jpg" width="500"> |
+| Input | <img src="screenshots/input.png" width="500"> |
+| Gamma Correction | <img src="screenshots/gamma.jpg" width="500"> |
+| CLAHE | <img src="screenshots/clahe.jpg" width="500"> |
+| Bilateral Filter | <img src="screenshots/bilateral.jpg" width="500"> |
+| Final Output | <img src="screenshots/final.jpg" width="500"> |
 
 The proposed pipeline is:
 
