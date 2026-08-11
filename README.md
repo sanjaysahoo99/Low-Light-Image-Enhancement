@@ -34,19 +34,19 @@ The following images show the output at each stage of the proposed enhancement p
 
 ### Gamma Correction
 
-![Gamma Correction](screenshotsgamma.jpg)
+![Gamma Correction](screenshots/gamma.jpg)
 
 ### CLAHE Enhancement
 
-![CLAHE Enhancement](screenshotsclahe.jpg)
+![CLAHE Enhancement](screenshots/clahe.jpg)
 
 ### Bilateral Filtering
 
-![Bilateral Filtering](screenshotsbilateral.jpg)
+![Bilateral Filtering](screenshots/bilateral.jpg)
 
 ### Final Enhanced Image
 
-![Final Enhanced Image](screenshotsfinal.jpg)
+![Final Enhanced Image](screenshots/final.jpg)
 ## 🔄 Enhancement Pipeline
 
 
