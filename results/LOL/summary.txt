@@ -1,0 +1,18 @@
+========================================
+LOL DATASET EVALUATION
+========================================
+
+Dataset: LOL
+Test Images: 15
+
+Average PSNR : 14.49 dB
+Average SSIM : 0.7684
+
+Minimum PSNR : 8.59 dB
+Maximum PSNR : 22.32 dB
+
+Minimum SSIM : 0.5729
+Maximum SSIM : 0.9058
+
+Successfully processed: 15/15
+========================================
