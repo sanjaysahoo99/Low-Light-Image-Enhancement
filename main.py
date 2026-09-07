@@ -8,7 +8,7 @@ from modules.gamma         import gamma_correction
 from modules.clahe         import apply_clahe
 from modules.bilateral     import bilateral_filter
 from modules.color_restore import restore_color
-from modules.evaluation    import evaluate
+from modules.evaluation    import evaluate, export_ablation_study
 from utils.save_images     import save
 
 SUPPORTED_EXT = {".png", ".jpg", ".jpeg"}
@@ -110,3 +110,16 @@ for s in STAGES:
         print(f"{s:<25} {mp:>15.4f} {ms:>12.4f}")
 print("-" * 54)
 print(f"\nImages evaluated: {len(stage_psnr[STAGES[0]])} / {n}")
+
+# ------------------------------------------------------------------ #
+# Export ablation study — CSV + Markdown table
+# ------------------------------------------------------------------ #
+ablation_data = {
+    s: (
+        sum(stage_psnr[s]) / len(stage_psnr[s]),
+        sum(stage_ssim[s]) / len(stage_ssim[s])
+    )
+    for s in STAGES if stage_psnr[s]
+}
+
+export_ablation_study(ablation_data, output_path="output/ablation_study.csv")
