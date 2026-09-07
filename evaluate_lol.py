@@ -70,7 +70,7 @@ def get_dataset_config(dataset):
             "low_dir"    : config.LOLV2_REAL_LOW,
             "high_dir"   : config.LOLV2_REAL_HIGH,
             "results_dir": os.path.join("results", "LOLv2_Real"),
-            "pairing"    : "numeric",      # low00690.png <-> normal00690.png
+            "pairing"    : "lolv2",        # low00690.png <-> normal00690.png
         }
     else:
         raise ValueError(f"Unknown dataset: {dataset}. Use 'lol' or 'lolv2'.")
@@ -93,27 +93,18 @@ def find_gt_exact(filename, gt_dir):
     return None
 
 
-def build_numeric_index(gt_dir):
+def find_gt_lolv2(filename, gt_dir):
     """
-    LOL-v2: build a dict mapping numeric ID -> full gt path.
-    e.g. normal00690.png -> {'690': '/path/normal00690.png'}
+    LOL-v2: low00690.png -> normal00690.png
+    Replaces the 'low' prefix with 'normal', keeps the zero-padded ID and ext.
     """
-    index = {}
-    for f in os.listdir(gt_dir):
-        if os.path.splitext(f)[1].lower() in SUPPORTED_EXT:
-            nums = re.findall(r"\d+", f)
-            if nums:
-                index[str(int(nums[-1]))] = os.path.join(gt_dir, f)
-    return index
-
-
-def find_gt_numeric(filename, gt_index):
-    """LOL-v2: extract numeric ID from low filename, look up in gt_index."""
-    nums = re.findall(r"\d+", filename)
-    if not nums:
+    # extract the zero-padded numeric suffix e.g. '00690' from 'low00690.png'
+    m = re.match(r"low(\d+)(\.[^.]+)$", filename, re.IGNORECASE)
+    if not m:
         return None
-    key = str(int(nums[-1]))
-    return gt_index.get(key, None)
+    gt_name = f"normal{m.group(1)}{m.group(2).lower()}"
+    candidate = os.path.join(gt_dir, gt_name)
+    return candidate if os.path.isfile(candidate) else None
 
 
 # ------------------------------------------------------------------ #
@@ -242,8 +233,8 @@ def main(dataset):
 
     total = len(low_files)
 
-    # build GT index for LOLv2 numeric pairing
-    gt_index = build_numeric_index(high_dir) if pairing == "numeric" else None
+    # no pre-built index needed for lolv2 (direct filename substitution)
+    gt_index = None
 
     rows      = []
     psnr_list = []
@@ -265,8 +256,8 @@ def main(dataset):
         # --- locate ground-truth ---
         if pairing == "exact":
             gt_path = find_gt_exact(filename, high_dir)
-        else:
-            gt_path = find_gt_numeric(filename, gt_index)
+        else:  # lolv2
+            gt_path = find_gt_lolv2(filename, high_dir)
 
         if gt_path is None:
             reason = "ground-truth not found"
@@ -414,6 +405,26 @@ def main(dataset):
     }
     export_ablation_study(ablation_data, output_path=ablation_csv)
     save_ablation_plot(ablation_data, save_path=ablation_plot)
+
+    # ------------------------------------------------------------------ #
+    # Print ablation summary table
+    # ------------------------------------------------------------------ #
+    sep2 = "-" * 44
+    print(f"\n{sep2}")
+    print(f"  ABLATION SUMMARY -- {dataset_name}")
+    print(sep2)
+    print(f"  {'Stage':<22} {'PSNR (dB)':>10} {'SSIM':>8} {'Delta PSNR':>12}")
+    print(sep2)
+    prev = None
+    for stage in ABLATION_STAGES:
+        if stage_psnr[stage]:
+            mp = sum(stage_psnr[stage]) / len(stage_psnr[stage])
+            ms = sum(stage_ssim[stage]) / len(stage_ssim[stage])
+            d = mp - prev if prev is not None else None
+            delta = f"{d:+.4f}" if d is not None else "  baseline"
+            print(f"  {stage:<22} {mp:>10.4f} {ms:>8.4f} {delta:>12}")
+            prev = mp
+    print(sep2)
 
     print(f"\nMetrics CSV      : {os.path.abspath(csv_path)}")
     print(f"Summary          : {os.path.abspath(summary_path)}")
