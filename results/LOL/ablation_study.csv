@@ -1,0 +1,6 @@
+Stage,Technique Applied,Mean PSNR (dB),Mean SSIM,Delta PSNR Gain
+Raw Low-Light,No enhancement (baseline),7.7733,0.1898,0.0
+After Gamma,Gamma Correction (gamma=1.8),11.2736,0.5712,3.5003
+After CLAHE,"Gamma + CLAHE (clipLimit=2.0, tile=8x8)",14.3857,0.6358,3.1121
+After Bilateral,Gamma + CLAHE + Bilateral Filter (d=9),14.5003,0.7708,0.1146
+After Color Restore,Gamma + CLAHE + Bilateral + Color Restoration,14.4863,0.7684,-0.014

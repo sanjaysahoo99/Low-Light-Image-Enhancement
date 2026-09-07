@@ -122,4 +122,4 @@ ablation_data = {
     for s in STAGES if stage_psnr[s]
 }
 
-export_ablation_study(ablation_data, output_path="output/ablation_study.csv")
+export_ablation_study(ablation_data, output_path="results/LOL/ablation_study.csv")
