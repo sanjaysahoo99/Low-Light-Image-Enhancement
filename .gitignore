@@ -8,12 +8,10 @@ LOLdataset.zip
 
 # ---------------------------------------------------------------
 # Generated outputs
-# Reproducible by running main.py, evaluate_lol.py, make_comparisons.py
+# Reproducible by running main.py
 # ---------------------------------------------------------------
 input/
 output/
-results/LOL/enhanced/
-results/LOL/comparisons/
 
 # ---------------------------------------------------------------
 # Python cache
