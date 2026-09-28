@@ -5,8 +5,9 @@ Benchmarks the existing enhancement pipeline on LOL or LOL-v2 Real datasets.
 
 Usage
 -----
-  python evaluate_lol.py --dataset lol        # LOL eval15   (15 images)
-  python evaluate_lol.py --dataset lolv2      # LOL-v2 Real  (100 images)
+  python evaluate_lol.py --dataset lol        # LOL eval15        (15 images)
+  python evaluate_lol.py --dataset lolv2      # LOL-v2 Real       (100 images)
+  python evaluate_lol.py --dataset lolv2syn   # LOL-v2 Synthetic  (100 images)
 
 Outputs (per dataset)
 ---------------------
@@ -17,7 +18,8 @@ Outputs (per dataset)
     ablation_study.csv           - per-stage mean PSNR, SSIM, delta
     ablation_curve.png           - dual-axis PSNR/SSIM chart
 
-Does NOT modify any existing module or algorithm.
+The enhancer never reads the ground-truth image. Metrics are computed
+afterwards, against the paired normal-light photo.
 """
 
 import os
@@ -32,23 +34,13 @@ import matplotlib.ticker as ticker
 import numpy as np
 
 import config
-from modules.image_io      import load_image
-from modules.preprocessing import preprocess
-from modules.gamma         import gamma_correction
-from modules.clahe         import apply_clahe
-from modules.bilateral     import bilateral_filter
-from modules.color_restore import restore_color
-from modules.evaluation    import evaluate, export_ablation_study
+from modules.image_io   import load_image
+from modules.pipeline   import STAGE_NAMES, enhance, run_stages
+from modules.evaluation import evaluate, export_ablation_study
 
 SUPPORTED_EXT = {".png", ".jpg", ".jpeg"}
 
-ABLATION_STAGES = [
-    "Raw Low-Light",
-    "After Gamma",
-    "After CLAHE",
-    "After Bilateral",
-    "After Color Restore",
-]
+ABLATION_STAGES = STAGE_NAMES
 
 
 # ------------------------------------------------------------------ #
@@ -72,8 +64,18 @@ def get_dataset_config(dataset):
             "results_dir": os.path.join("results", "LOLv2_Real"),
             "pairing"    : "lolv2",        # low00690.png <-> normal00690.png
         }
+    elif dataset == "lolv2syn":
+        return {
+            "name"       : "LOL-v2 Synthetic",
+            "low_dir"    : config.LOLV2_SYN_LOW,
+            "high_dir"   : config.LOLV2_SYN_HIGH,
+            "results_dir": os.path.join("results", "LOLv2_Synthetic"),
+            "pairing"    : "exact",        # same filename in Low/ and Normal/
+        }
     else:
-        raise ValueError(f"Unknown dataset: {dataset}. Use 'lol' or 'lolv2'.")
+        raise ValueError(
+            f"Unknown dataset: {dataset}. Use 'lol', 'lolv2', or 'lolv2syn'."
+        )
 
 
 # ------------------------------------------------------------------ #
@@ -112,23 +114,13 @@ def find_gt_lolv2(filename, gt_dir):
 # ------------------------------------------------------------------ #
 
 def run_pipeline(image):
-    """Exact pipeline — nothing changed."""
-    image = preprocess(image)
-    image = gamma_correction(image, config.GAMMA)
-    image = apply_clahe(image)
-    image = bilateral_filter(image)
-    image = restore_color(image)
-    return image
+    """Final enhanced image. Ground truth is not used."""
+    return enhance(image)
 
 
 def run_ablation_stages(image):
     """Return intermediate outputs at each stage."""
-    s0 = preprocess(image)
-    s1 = gamma_correction(s0, config.GAMMA)
-    s2 = apply_clahe(s1)
-    s3 = bilateral_filter(s2)
-    s4 = restore_color(s3)
-    return [s0, s1, s2, s3, s4]
+    return run_stages(image)
 
 
 # ------------------------------------------------------------------ #
@@ -141,8 +133,8 @@ def save_ablation_plot(ablation_data, save_path):
     ssim_vals = [ablation_data[s][1] for s in stages]
 
     x_labels = [
-        "Baseline\n(Raw)", "+Gamma\nCorrection",
-        "+CLAHE", "+Bilateral\nFilter", "+Color\nRestore",
+        "Baseline\n(Raw)", "+Illumination\n(LIME)",
+        "+Adaptive\nTone", "+Detail\nRefine", "+Color\nRestore",
     ]
     x = np.arange(len(stages))
 
@@ -443,9 +435,9 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--dataset",
-        choices=["lol", "lolv2"],
+        choices=["lol", "lolv2", "lolv2syn"],
         default="lol",
-        help="Dataset to evaluate: 'lol' (eval15) or 'lolv2' (Real_captured/Test). Default: lol"
+        help="Dataset: 'lol' (eval15), 'lolv2' (Real test), or 'lolv2syn' (Synthetic test)."
     )
     args = parser.parse_args()
     main(args.dataset)
